@@ -1,3 +1,11 @@
-[gd_scene format=3 uid="uid://c48w63n8pm6eu"]
+[gd_scene load_steps=2 format=3 uid="uid://c48w63n8pm6eu"]
+
+[ext_resource type="PackedScene" uid="uid://cdpwxfwv4ngk2" path="res://Scenes/Player.tscn" id="1_kpahj"]
 
 [node name="Main" type="Node2D"]
+position = Vector2(178.633, 83.211)
+scale = Vector2(2.34235, 2.21621)
+
+[node name="Player" parent="." instance=ExtResource("1_kpahj")]
+scale = Vector2(0.983749, 0.973115)
+speed = 100
