@@ -25,20 +25,17 @@ func _physics_process(delta):
 		speed = 100
 	elif Input.is_action_just_released("ui_sprint"):
 		speed = 50
-
 	# Apply movement
 	var movement = speed * direction * delta
-	# moves our player around, whilst enforcing collisions so that they come to a stop when colliding with another object.
-	move_and_collide(movement)
-	
-	#plays animations
-	player_animations(direction)
 	
 	if !is_attacking:
 		#moves player around, whilst enforcing collision so that they come to a stop when colliding with another object
 		move_and_collide(movement)
 		#plays animations only if  player isn't attacking
 		player_animations(direction)
+	
+	if is_attacking and !$AnimatedSprite2D.is_playing():
+		is_attacking = false
 
 #animations to play
 func player_animations(direction : Vector2):
@@ -53,38 +50,37 @@ func player_animations(direction : Vector2):
 		animation = "idle_" + returned_direction(new_direction)
 		$AnimatedSprite2D.play(animation)
 		
-func returned_direction(direction : Vector2):
-
-	var normalized_direction = direction.normalized()
-	var default_return = "side"
-	
-	if normalized_direction.y > 0:
-		return "down"
-	elif normalized_direction.y < 0:
-		return "up"
-	elif normalized_direction.x > 0:
-		# Right
-		$AnimatedSprite2D.flip_h = false
-		return "side"
-	elif normalized_direction.x < 0:
-		#Flip sprite fo reusability (left)
-		$AnimatedSprite2D.flip_h = true
-		return "side"
-		
-	#default value if empty
-	return default_return
 
 #plays attacking animation
 func _input(event):
 	
-	if even.is_action_pressed("ui_attack"):
-		
+	if event.is_action_pressed("ui_attack"):
 		#attacking/shooting animation
 		is_attacking = true
 		var animation = "attack_" + returned_direction(new_direction)
 		$AnimatedSprite2D.play(animation)
 		
 
+#returns the animation direction
+func returned_direction(direction : Vector2):
+	#it normalizes the direction vector to make sure it has length 1 (1, or -1 up, down, left, and right) 
+	var normalized_direction  = direction.normalized()
+	
+	if normalized_direction.y >= 1:
+		return "down"
+	elif normalized_direction.y <= -1:
+		return "up"
+	elif normalized_direction.x >= 1:
+		#(right)
+		$AnimatedSprite2D.flip_h = false
+		return "side"
+	elif normalized_direction.x <= -1:
+		#flip the animation for reusability (left)
+		$AnimatedSprite2D.flip_h = true
+		return "side"
+		
+	#default value is empty
+	return ""
 
 func _on_animated_sprite_2d_animation_finished():
 	is_attacking = false
