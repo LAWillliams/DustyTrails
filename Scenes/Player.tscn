@@ -593,6 +593,7 @@ animations = [{
 [node name="Player" type="CharacterBody2D"]
 scale = Vector2(1, 0.910167)
 script = ExtResource("1_c2sof")
+speed = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_3wjet")
@@ -602,3 +603,5 @@ sprite_frames = SubResource("SpriteFrames_in45y")
 animation = &"attack_side"
 frame = 5
 frame_progress = 1.0
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
